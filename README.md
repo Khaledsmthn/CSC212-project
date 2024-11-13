@@ -1,2 +1,2 @@
 # CSC212-project
-test.
+We'll write some details here later on.
