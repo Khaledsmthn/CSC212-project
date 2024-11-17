@@ -1,4 +1,3 @@
-//create class BST with generic type, which will be used to help with inverted index by storing the terms in a binary search tree.
 public class BST<K extends Comparable<T>,T>{
     public class BSTnode<K extends Comparable<T>, T>{
         public K key;
