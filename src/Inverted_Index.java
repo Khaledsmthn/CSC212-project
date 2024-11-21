@@ -50,11 +50,17 @@ public class Inverted_Index {
 			return false;
 		
 		InvertIndex.findFirst();
-		for(int i=0 ; i< InvertIndex.size; i++) {
-			if(InvertIndex.retrieve().word.word.compareTo(word)==0)
+		while(!InvertIndex.last()) {
+			if(InvertIndex.retrieve().word.word.compareTo(word)==0) {
 				return true;
+			}
 			InvertIndex.findNext();		
 		}
+		
+		if(InvertIndex.retrieve().word.word.compareTo(word)==0) { // to check on the last document after iteration
+			return true;
+		}
+		//if the word wasn't found	
 		return false;
 	}
 
