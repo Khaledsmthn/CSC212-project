@@ -27,7 +27,7 @@ public class AVL<K extends Comparable<K>, T>   {
 	public AVLNode(K key, T data, AVLNode<K,T> p, AVLNode<K,T> l, AVLNode<K,T> r) {
 		this.key = key;
 		this.data =data;
-		p = parent;
+		p = this.parent;
 		left = l; 
 		right = r;
 		BF =0;
@@ -119,26 +119,66 @@ public class AVL<K extends Comparable<K>, T>   {
             }
             return false;  
     }  
-	    //same as slides but not sure about it
-	    public  AVLNode<K,T> leftRotate(AVLNode<K,T> a) {  
-              AVLNode<K,T> b = a.left;
-              a.left = b.right;
-              b.right = a;
-              
-              a.BF = Math.max(a.left.BF, a.right.BF)+1; 
-              b.BF = Math.max(b.left.BF, a.BF)+1;
-              return b;
-        }
-	    //same as slides but not sure about it
-	    public  AVLNode<K,T> rightRotate(AVLNode<K,T> a) {  
-            AVLNode<K,T> b = a.right;
-            a.right = b.left;
-            b.left = a;
-            
-            a.BF = Math.max(a.left.BF, a.right.BF)+1; 
-            b.BF = Math.max(b.right.BF, a.BF)+1;
-            return b;
-      }
+
+	    public AVLNode<K,T> leftRotate(AVLNode<K,T> a) {
+			// Rotate
+			AVLNode<K,T> b = a.right;
+			a.right = b.left;
+			if (b.left != null) {
+				b.left.parent = a; // Update parent of b.left
+			}
+		
+			b.left = a;
+		
+			// Update parents
+			b.parent = a.parent;
+			if (a.parent == null) {
+				this.root = b; // Update root if a was the root
+			} else if (a == a.parent.left) {
+				a.parent.left = b; // Update parent's left child
+			} else {
+				a.parent.right = b; // Update parent's right child
+			}
+			a.parent = b;
+		
+			//Update balance factors
+			a.BF = Math.max(a.left != null ? a.left.BF : -1, a.right != null ? a.right.BF : -1) + 1;
+			b.BF = Math.max(b.right != null ? b.right.BF : -1, a.BF) + 1;
+		
+			//Return the new root of the rotated subtree
+			return b;
+		}
+		
+
+	    public AVLNode<K, T> rightRotate(AVLNode<K, T> a) {
+			//Perform the rotation
+			AVLNode<K, T> b = a.left;
+			a.left = b.right;
+			if (b.right != null) {
+				b.right.parent = a; // Update parent of b.right
+			}
+		
+			b.right = a;
+		
+			//Update parent pointers
+			b.parent = a.parent;
+			if (a.parent == null) {
+				this.root = b; // Update root if a was the root
+			} else if (a == a.parent.right) {
+				a.parent.right = b; // Update parent's right child
+			} else {
+				a.parent.left = b; // Update parent's left child
+			}
+			a.parent = b;
+		
+			//Update balance factors
+			a.BF = Math.max(a.left != null ? a.left.BF : -1, a.right != null ? a.right.BF : -1) + 1;
+			b.BF = Math.max(b.left != null ? b.left.BF : -1, a.BF) + 1;
+		
+			//Return the new root of the rotated subtree
+			return b;
+		}
+		
 	  //same as slides
 	    public  AVLNode<K,T> lr_Rotation(AVLNode<K,T> a){
 	    	a.left = rightRotate(a.left);
@@ -151,7 +191,7 @@ public class AVL<K extends Comparable<K>, T>   {
 	    	return rightRotate(a);
 	    }
 	    
-	    //different from slides
+		//different from slides
 	    public boolean insert(K key, T data) {  
             AVLNode<K,T> node = new AVLNode<K,T>(key, data);  
   
@@ -285,6 +325,47 @@ public class AVL<K extends Comparable<K>, T>   {
                 }  
     }  
 }  
+
+public void Traverse()  
+	        {  
+	            if (root != null)  
+	                traverseTree(root);  
+	        }  
+	          
+	        private void traverseTree (AVLNode<K,T> node  )  
+	        {  
+	            if (node == null)  
+	                return;  
+	            traverseTree( node.left);  
+	            System.out.println(node.data);  
+	            traverseTree( node.right);  
+	              
+	        }  
+public void TraverseT()  
+	        {  
+	            if (root != null)  
+	                traverseTreeT(root);  
+	        }  
+	          
+	        private void traverseTreeT (AVLNode<K,T> node)  
+	        {  
+	            if (node == null)  
+	                return;  
+	            traverseTreeT( node.left );  
+	            if (node.getData() instanceof AVL )  
+				try {
+	            {  
+	                System.out.println( "Node key ==== "+ node.key);  
+	                ((AVL<?,?>) node.getData()).Traverse();  //word and freq/rank.
+	            }  }catch(Exception e) {
+	            	System.out.println("incompatible AVL type");
+	            }
+	            else  
+	                System.out.println(node.data);  
+	              
+	            traverseTreeT( node.right);  
+	              
+	        }  
 	  
 	    /*
 	    public T  remove_maximum() {  
@@ -308,7 +389,7 @@ public class AVL<K extends Comparable<K>, T>   {
 	                return recAVL_Search_maximum(x.right);   
 	        }   
 	  
-	       //============================================================================  
+	     
 	       public void Traverse()  
 	        {  
 	            if (root != null)  
