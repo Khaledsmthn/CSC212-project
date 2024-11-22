@@ -9,11 +9,11 @@ public class IndexRanked {
 
 	public class Document{
 		int docID;		
-		LinckedList <String> index ;
+		LinkedList <String> index ;
 		
 		public Document() {
 			docID = 0 ;
-			index = new LinckedList<String>();
+			index = new LinkedList<String>();
 		}
 		
 		public void addWord(String word) { 
