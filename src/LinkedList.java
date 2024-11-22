@@ -1,4 +1,3 @@
-
 public class LinkedList<T>{ //same as the one in the slides with size added.
     
     // class Node
