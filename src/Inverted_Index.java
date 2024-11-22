@@ -1,10 +1,10 @@
 
 public class Inverted_Index {
 
-	LinckedList <Terms> InvertIndex;
+	LinkedList <Terms> InvertIndex;
 	
 	public Inverted_Index() {
-		 InvertIndex = new LinckedList <Terms>() ;
+		 InvertIndex = new LinkedList <Terms>() ;
 	}
 	
 	public boolean addNew(int docID, String word) { //adds new term to the index
