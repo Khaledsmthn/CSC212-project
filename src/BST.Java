@@ -1,3 +1,4 @@
+
 public class BST<K extends Comparable<T>,T>{
     public class BSTnode<K extends Comparable<T>, T>{
         public K key;

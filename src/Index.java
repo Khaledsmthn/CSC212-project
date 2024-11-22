@@ -1,3 +1,4 @@
+
 //class index is a class that contains a list of documents and each document contains a list of words, linked list in a linked list.
 public class Index {
 
