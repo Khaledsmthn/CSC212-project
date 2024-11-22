@@ -151,5 +151,27 @@ public class BST<K extends Comparable<K>,T>{
             InOrder(root.right);
         }
     }
+    public void TraverseT() //taken method, might help if the inorder fails.
+        {
+            if (root != null)
+                traverseTreeT(root);
+        }
+        
+        private void traverseTreeT (BSTnode<K, T> node)
+        {
+            if (node == null)
+                return;
+            traverseTreeT( node.left );
+            if (node.data instanceof BST )
+            {
+                System.out.println( "key ==== "+ node.key);
+                ((BST<String,Rank>) node.data).Traverse();
+            }
+            else
+                System.out.println(node.data);
+            
+            traverseTreeT( node.right);
+            
+        }
 
 } 

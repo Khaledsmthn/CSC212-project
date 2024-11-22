@@ -1,0 +1,148 @@
+public class rankedInvertedIndexBST{
+    class frequency{
+        int docID;
+        int freq;
+    }
+    BST<Integer, BST<String, Rank>> rankedBST;
+    frequency[] freq = new frequency[100];
+    int freqIndex = 0;
+    public rankedInvertedIndexBST(){
+        rankedBST = new BST<Integer, BST<String, Rank>>(); //key: docID or any other, value: BST<word, Rank>
+    }
+    public boolean insert(int docID, String word){
+        if(rankedBST.empty()){
+            BST<String, Rank> temp = new BST<String, Rank>();
+            temp.insert(word, new Rank(word, 1));
+            rankedBST.insert(docID, temp);
+            return true;
+        }
+        else{
+            if(rankedBST.Findkey(docID)){ 
+                BST<String, Rank> temp = rankedBST.retrieve();
+                if(temp.Findkey(word)){//found both document & word
+                    Rank tempRank = temp.retrieve();
+                    tempRank.add_Rank();
+                    temp.update(tempRank);
+                    rankedBST.update(temp);
+                    return false;
+                }
+                    temp.insert(word, new Rank(word, 1)); //found document but not word
+                    rankedBST.update(temp);
+                    return true;
+            }
+                //document not found
+                BST<String, Rank> temp = new BST<String, Rank>();
+                temp.insert(word, new Rank(word, 1));
+                rankedBST.insert(docID, temp);
+                return true;
+        }
+    } //end of insert
+
+    public boolean found(int docID, String word){
+        if(rankedBST.Findkey(docID)){
+            if(rankedBST.retrieve().Findkey(word)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getRank(int docID, String word){
+        if(rankedBST.Findkey(docID)){
+            if(rankedBST.retrieve().Findkey(word)){
+                return rankedBST.retrieve().retrieve().getRank();
+            }
+        }
+        return 0; //not found
+    }
+
+    public void print(){
+        rankedBST.TraverseT();
+    }
+    public void TermFrequency(String word){
+        word = word.toLowerCase().trim();
+        String[] words = word.split(" ");
+        int index = 0;
+        for(int docID = 0; docID < 100; docID++){
+            int count = 0;
+            for(int j = 0; j < words.length; j++){
+                count+= getRank(docID, words[j]);
+            }
+            if(count>0){
+                freq[index] = new frequency();
+                freq[index].docID = docID;
+                freq[index].freq = count;
+                index++;
+            }
+        }
+        heapSort(freq);
+        //mergeSort(freq, 0, freq.length-1); //also works
+    }
+    public static void heapSort(frequency[] freq){
+        int n = freq.length;
+        for(int i = n/2 - 1; i >= 0; i--){
+            heapify(freq, n, i);
+        }
+        for(int i = n-1; i > 0; i--){
+            frequency temp = freq[0];
+            freq[0] = freq[i];
+            freq[i] = temp;
+            heapify(freq, i, 0);
+        }
+    }
+    public static void heapify(frequency[] freq, int n, int i){
+        int largest = i;
+        int l = 2*i + 1;
+        int r = 2*i + 2;
+        if(l < n && freq[l].freq > freq[largest].freq){
+            largest = l;
+        }
+        if(r < n && freq[r].freq > freq[largest].freq){
+            largest = r;
+        }
+        if(largest != i){
+            frequency swap = freq[i];
+            freq[i] = freq[largest];
+            freq[largest] = swap;
+            heapify(freq, n, largest);
+        }
+    }
+
+    public static void mergeSort(frequency[] f , int l , int r){ 
+		
+		if(l >= r)
+		return ;
+		
+		int m = (l + r)/2;
+		
+		mergeSort(f , l , m);
+		mergeSort(f, m+1 ,r);
+		merge (f, l , m , r);
+		
+		}		
+		
+		public static void merge(frequency[] f , int l , int m , int r) {
+			
+		frequency[] v = new frequency[r - l + 1];	
+		int i = l , j = m+1 ,k = 0;	
+		
+		while(i <= m && j <= r) {
+			if( f[i].freq >= f[j].freq)
+				v[k++] = f[i++];
+			else
+				v[k++] = f[j++];
+		}
+			if(i > m)
+				while( j <= r)
+					v[k++] = f[j++];
+			else
+				while(i <= m)
+					v[k++] = f[i++];
+			
+			for(k=0; k < v.length ; k++)
+				f[k+1] = v[k];
+		
+		}
+
+
+}
