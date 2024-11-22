@@ -1,5 +1,5 @@
-public class BST<K extends Comparable<T>,T>{
-    public class BSTnode<K extends Comparable<T>, T>{
+public class BST<K extends Comparable<K>,T>{
+    public class BSTnode<K extends Comparable<K>, T>{
         public K key;
         public T data;
         public BSTnode<K, T> left, right;
@@ -23,6 +23,7 @@ public class BST<K extends Comparable<T>,T>{
     public int size; 
     public BST(){
         root = current = null;
+        size = 0;
     }   
     public boolean empty(){
         return root == null;
@@ -56,9 +57,12 @@ public class BST<K extends Comparable<T>,T>{
     }
     public boolean Findkey(K k)//same as slides, sets current when found and returns true.
     {
-        BSTnode<K, T> tmp = root;
+        BSTnode<K,T> tmp = root;
+        if(empty())
+        	return false;
+        
         while(tmp != null){
-            if(k.compareTo(tmp.key) == 0){
+            if(tmp.key.compareTo(k) == 0){
                 current = tmp;
                 return true;
             }else if(k.compareTo(tmp.key) < 0){
@@ -71,18 +75,17 @@ public class BST<K extends Comparable<T>,T>{
     }
     public boolean insert(K k, T val) // Findkey usage in this method will be redundant, it only assigns current and not current's parent.
     {
-        BSTnode<K, T> tmp, tmp2;
-        if(root == null){
-            root = new BSTnode<K, T>(k, val);
-            size++;
-            return true;
-        }
-        tmp = root;
+    	if(empty()) {
+            root = current = new BSTnode<K, T>(k, val);
+            }
+        BSTnode<K, T> tmp, tmp2 = null;
+        tmp = root; 
         while(tmp != null){
-            tmp2 = tmp;
-            if(k.compareTo(tmp.key) < 0){
+        	if(tmp.key.compareTo(k) < 0){
+            	tmp2 = tmp;
                 tmp = tmp.left;
             }else if(k.compareTo(tmp.key) > 0){
+            	tmp2 = tmp;
                 tmp = tmp.right;
             }else{
                 return false; //element found, duplicate key is not allowed.
@@ -90,8 +93,10 @@ public class BST<K extends Comparable<T>,T>{
         }
         if(k.compareTo(tmp2.key) < 0){ //tmp2 here is the parent of the new node.
             tmp2.left = new BSTnode<K, T>(k, val);
+            tmp = tmp2.left;
         }else{
             tmp2.right = new BSTnode<K, T>(k, val);
+            tmp = tmp2.right;
         }
         size++;
         return true;
