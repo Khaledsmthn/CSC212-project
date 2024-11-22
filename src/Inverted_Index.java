@@ -2,7 +2,7 @@
 public class Inverted_Index {
 
 	LinkedList<Terms> InvertIndex;
-	
+		
 	public Inverted_Index() {
 		LinkedList <Terms> InvertIndex = new LinkedList<Terms>() ;
 	}

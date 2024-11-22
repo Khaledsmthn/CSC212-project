@@ -138,5 +138,18 @@ public class BST<K extends Comparable<K>,T>{
         }
         return node;
     }
+    public void Traverse() {
+        if (empty()) {
+            return;
+        }
+        InOrder(root);
+    }
+    public void InOrder(BSTnode<K, T> root) {
+        if (root != null) {
+            InOrder(root.left);
+            System.out.println(root.key + " ");
+            InOrder(root.right);
+        }
+    }
 
 } 
