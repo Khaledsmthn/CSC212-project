@@ -365,7 +365,34 @@ public void TraverseT()
 	              
 	            traverseTreeT( node.right);  
 	              
-	        }  
+	        }
+	        public void PrintData()
+	        {
+	            if (root != null)
+	                PrintData_(root);
+	        }
+	        
+	        private void PrintData_ (AVLNode<K,T> node)
+	        {
+	            if (node == null)
+	                return;
+	            PrintData_( node.left );
+	           
+	           System.out.print(node.key);
+	            if (node.getData() instanceof Terms )
+	            {
+	                System.out.print("   docs: ");
+	                boolean [] docs = ((Terms) node.data).getDocs();
+	                for ( int i  = 0 ; i < 50 ; i++)
+	                    if ( docs[i])
+	                        System.out.print( " " + i + " " );
+	                System.out.println("");
+	            }
+	                
+	            
+	            PrintData_( node.right);
+	            
+	        }
 	  
 	    /*
 	    public T  remove_maximum() {  

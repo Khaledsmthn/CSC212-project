@@ -173,5 +173,30 @@ public class BST<K extends Comparable<K>,T>{
             traverseTreeT( node.right);
             
         }
+        
+        public void PrintData()
+        {
+            if (root != null)
+                PrintData_(root);
+        }
+        
+        private void PrintData_ (BSTnode<K,T> node)
+        {
+            if (node == null)
+                return;
+            PrintData_( node.left );
+           
+           System.out.print(node.key);
+            if (node.data instanceof Terms )
+            {
+                System.out.print("   docs: ");
+                boolean [] docs = ((Terms) node.data).getDocs();
+                for ( int i  = 0 ; i < 50 ; i++)
+                    if ( docs[i])
+                        System.out.print( " " + i + " " );
+                System.out.println("");
+            }
+            PrintData_( node.right);
+        }
 
 } 
