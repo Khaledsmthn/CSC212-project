@@ -1,4 +1,3 @@
-package project;
 
 public class Inverted_Index_Ranked {
 	
