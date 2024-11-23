@@ -47,6 +47,7 @@ public class SearchEngine{
                 text = text.substring(0, text.length()-1); //remove the last comma
                 text = text.toLowerCase();
                 text = text.replaceAll("[\']", " "); //remove apostrophes
+                text = text.replaceAll("-", " ");
                 text = text.replaceAll("[^a-zA-Z0-9]", " ").trim(); //remove special characters
                 String[] words = text.split(" "); //split the text into words
                 for(int j=0; j<words.length; j++){

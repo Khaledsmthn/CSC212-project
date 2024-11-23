@@ -61,7 +61,7 @@ public class Index {
 	else {
 		Indexes[docID].index.findFirst();
 		for(int i=0; i<Indexes[docID].index.size; i++) {
-			 System.out.print(Indexes[docID].index.retrieve() + "");
+			 System.out.println(Indexes[docID].index.retrieve() + "");
 			 Indexes[docID].index.findNext();
 		}
 		}

@@ -6,11 +6,11 @@ public class Inverted_Index_Ranked {
 		int freq =0; //  a frequency score
 	}
 	
-	LinkedList<Terms> InvertedIndex;
+	LinkedList<TermRank> InvertedIndex;
 	Frequency[] Freqs;
 
 	public Inverted_Index_Ranked() {
-		InvertedIndex = new LinkedList<Terms>();
+		InvertedIndex = new LinkedList<TermRank>();
 		Freqs = new Frequency[50];
 	}
 	
@@ -23,9 +23,9 @@ public class Inverted_Index_Ranked {
 		
 		if(InvertedIndex.empty()) {
 			
-			Terms t = new Terms();
-			t.setWord(word); 
-			t.addDoc(docID);
+			TermRank t = new TermRank();
+			t.setVocabulary(new Vocab(word)); 
+			t.add_docID(docID);
 			InvertedIndex.insert(t);
 			return true;
 		}
@@ -36,8 +36,8 @@ public class Inverted_Index_Ranked {
 				
 				if(InvertedIndex.retrieve().word.word.compareTo(word)== 0) {
 					
-					Terms t1 =  InvertedIndex.retrieve();
-					t1.addDoc(docID);
+					TermRank t1 =  InvertedIndex.retrieve();
+					t1.add_docID(docID);
 					InvertedIndex.update(t1); //update the existing term with new docID
 					return false; //because the word already exist
 				}
@@ -46,15 +46,15 @@ public class Inverted_Index_Ranked {
 			
 			if(InvertedIndex.retrieve().word.word.compareTo(word)== 0) { //to check on last element after the itreation
 				
-				Terms t1 =  InvertedIndex.retrieve();
-				t1.addDoc(docID);
+				TermRank t1 =  InvertedIndex.retrieve();
+				t1.add_docID(docID);
 				InvertedIndex.update(t1);
 				return false;
 		}
 			else { //If the word wasn't found in the index add it
-				Terms t2 = new Terms();
-				t2.setWord(word);
-				t2.addDoc(docID);
+				TermRank t2 = new TermRank();
+				t2.setVocabulary(new Vocab(word));
+				t2.add_docID(docID);
 				InvertedIndex.insert(t2);
 			}
 			return true;
@@ -69,17 +69,12 @@ public class Inverted_Index_Ranked {
 		
 		InvertedIndex.findFirst();
 		
-		while(!InvertedIndex.last()) {
-			if(InvertedIndex.retrieve().word.word.compareTo(word)==0) {
+		for(int i = 0; i<InvertedIndex.size;i++) {
+			if(InvertedIndex.retrieve().word.word.compareTo(word) == 0) {
 				return true;
 			}
-			InvertedIndex.findNext();		
+			InvertedIndex.findNext();
 		}
-		
-		if(InvertedIndex.retrieve().word.word.compareTo(word)==0) { // to check on the last document after iteration
-			return true;
-		}
-		//if the word wasn't found	
 		return false;
 	}
 
@@ -88,10 +83,10 @@ public class Inverted_Index_Ranked {
 		if(InvertedIndex.empty())
 	        System.out.println("the Inverted Index is empty");  
 		else {
-			InvertedIndex.findFirst();
-			while(!InvertedIndex.last()) {
+			this.InvertedIndex.findFirst();
+			while(!this.InvertedIndex.last()) {
 				System.out.println(InvertedIndex.retrieve());
-				InvertedIndex.findNext();
+				this.InvertedIndex.findNext();
 			}
 			System.out.println(InvertedIndex.retrieve()); //display last document
 		}
@@ -114,7 +109,7 @@ public class Inverted_Index_Ranked {
 		for(int i=0 ; i< terms.length ;i++) { 
 			
 			if(findWord(terms[i])) {
-				int[] Docs = InvertedIndex.retrieve().getFreq(); //the frequency of the word in the document(S)( i used the getfreq from terms class)
+				int[] Docs = InvertedIndex.retrieve().getDocs(); //the frequency of the word in the document(S)( i used the getfreq from terms class)
 				
 				for(int j=0 ; j < Docs.length; j++) {
 					

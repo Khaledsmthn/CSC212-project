@@ -120,15 +120,13 @@ public class AVL<K extends Comparable<K>, T>   {
             return false;  
     }  
 
-	    public AVLNode<K,T> leftRotate(AVLNode<K,T> a) {
+	    public void leftRotate(AVLNode<K,T> a) {
 			// Rotate
 			AVLNode<K,T> b = a.right;
 			a.right = b.left;
 			if (b.left != null) {
 				b.left.parent = a; // Update parent of b.left
 			}
-		
-			b.left = a;
 		
 			// Update parents
 			b.parent = a.parent;
@@ -139,18 +137,18 @@ public class AVL<K extends Comparable<K>, T>   {
 			} else {
 				a.parent.right = b; // Update parent's right child
 			}
+			b.left = a;
 			a.parent = b;
 		
 			//Update balance factors
-			a.BF = Math.max(a.left != null ? a.left.BF : -1, a.right != null ? a.right.BF : -1) + 1;
-			b.BF = Math.max(b.right != null ? b.right.BF : -1, a.BF) + 1;
+			a.BF = a.BF - 1 - Math.max(0, b.BF);
+			b.BF = b.BF - 1 + Math.min(0, a.BF);
 		
 			//Return the new root of the rotated subtree
-			return b;
 		}
 		
 
-	    public AVLNode<K, T> rightRotate(AVLNode<K, T> a) {
+	    public void rightRotate(AVLNode<K, T> a) {
 			//Perform the rotation
 			AVLNode<K, T> b = a.left;
 			a.left = b.right;
@@ -158,9 +156,6 @@ public class AVL<K extends Comparable<K>, T>   {
 				b.right.parent = a; // Update parent of b.right
 			}
 		
-			b.right = a;
-		
-			//Update parent pointers
 			b.parent = a.parent;
 			if (a.parent == null) {
 				this.root = b; // Update root if a was the root
@@ -169,27 +164,14 @@ public class AVL<K extends Comparable<K>, T>   {
 			} else {
 				a.parent.left = b; // Update parent's left child
 			}
+			b.right = a;
 			a.parent = b;
-		
 			//Update balance factors
-			a.BF = Math.max(a.left != null ? a.left.BF : -1, a.right != null ? a.right.BF : -1) + 1;
-			b.BF = Math.max(b.left != null ? b.left.BF : -1, a.BF) + 1;
+			a.BF = a.BF + 1 - Math.min(0, b.BF);
+			b.BF = b.BF + 1 + Math.max(0, a.BF);
 		
-			//Return the new root of the rotated subtree
-			return b;
 		}
 		
-	  //same as slides
-	    public  AVLNode<K,T> lr_Rotation(AVLNode<K,T> a){
-	    	a.left = rightRotate(a.left);
-	    	return leftRotate(a);
-	    }
-
-	  //same as slides
-	    public  AVLNode<K,T> rl_Rotation(AVLNode<K,T> a){
-	    	a.right = leftRotate(a.right);
-	    	return rightRotate(a);
-	    }
 	    
 		//different from slides
 	    public boolean insert(K key, T data) {  

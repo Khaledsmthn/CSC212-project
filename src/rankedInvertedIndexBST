@@ -1,11 +1,12 @@
+
 public class rankedInvertedIndexBST{
     class frequency{
-        int docID;
-        int freq;
+        int docID = 0;
+        int freq = 0;	
     }
     BST<Integer, BST<String, Rank>> rankedBST;
-    frequency[] freq = new frequency[100];
-    int freqIndex = 0;
+    frequency[] freq = new frequency[50];
+    
     public rankedInvertedIndexBST(){
         rankedBST = new BST<Integer, BST<String, Rank>>(); //key: docID or any other, value: BST<word, Rank>
     }
@@ -39,31 +40,30 @@ public class rankedInvertedIndexBST{
     } //end of insert
 
     public boolean found(int docID, String word){
-        if(rankedBST.Findkey(docID)){
-            if(rankedBST.retrieve().Findkey(word)){
+        if(rankedBST.Findkey(docID))
+            if(rankedBST.retrieve().Findkey(word))
                 return true;
-            }
-        }
         return false;
     }
 
     public int getRank(int docID, String word){
+    	int value = 0;
         if(rankedBST.Findkey(docID)){
             if(rankedBST.retrieve().Findkey(word)){
                 return rankedBST.retrieve().retrieve().getRank();
             }
         }
-        return 0; //not found
+        return value; //not found
     }
 
     public void print(){
         rankedBST.TraverseT();
     }
-    public void TermFrequency(String word){ //this function sorts the index based on the frequency of the word
+    public void TermFrequency(String word){
         word = word.toLowerCase().trim();
         String[] words = word.split(" ");
         int index = 0;
-        for(int docID = 0; docID < 100; docID++){
+        for(int docID = 0; docID < 50; docID++){
             int count = 0;
             for(int j = 0; j < words.length; j++){
                 count+= getRank(docID, words[j]);
@@ -75,74 +75,47 @@ public class rankedInvertedIndexBST{
                 index++;
             }
         }
-        heapSort(freq);
-        //mergeSort(freq, 0, freq.length-1); //also works
-    }
-    public static void heapSort(frequency[] freq){
-        int n = freq.length;
-        for(int i = n/2 - 1; i >= 0; i--){
-            heapify(freq, n, i);
-        }
-        for(int i = n-1; i > 0; i--){
-            frequency temp = freq[0];
-            freq[0] = freq[i];
-            freq[i] = temp;
-            heapify(freq, i, 0);
+       
+        mergesort(freq, 0, index-1); //also works
+        for(int x  = 0; x < index; x++) {
+        	System.out.println(freq[x].docID + "\t\t" + freq[x].freq);
         }
     }
-    public static void heapify(frequency[] freq, int n, int i){
-        int largest = i;
-        int l = 2*i + 1;
-        int r = 2*i + 2;
-        if(l < n && freq[l].freq > freq[largest].freq){
-            largest = l;
-        }
-        if(r < n && freq[r].freq > freq[largest].freq){
-            largest = r;
-        }
-        if(largest != i){
-            frequency swap = freq[i];
-            freq[i] = freq[largest];
-            freq[largest] = swap;
-            heapify(freq, n, largest);
-        }
+    
+
+    public static void mergesort ( frequency [] A , int l , int r ) 
+    {
+        if ( l >= r )
+            return;
+        int m = ( l + r ) / 2;
+        mergesort (A , l , m ) ;          // Sort first half
+        mergesort (A , m + 1 , r ) ;    // Sort second half
+        merge (A , l , m , r ) ;            // Merge
     }
 
-    public static void mergeSort(frequency[] f , int l , int r){ 
-		
-		if(l >= r)
-		return ;
-		
-		int m = (l + r)/2;
-		
-		mergeSort(f , l , m);
-		mergeSort(f, m+1 ,r);
-		merge (f, l , m , r);
-		
-		}		
-		
-		public static void merge(frequency[] f , int l , int m , int r) {
-			
-		frequency[] v = new frequency[r - l + 1];	
-		int i = l , j = m+1 ,k = 0;	
-		
-		while(i <= m && j <= r) {
-			if( f[i].freq >= f[j].freq)
-				v[k++] = f[i++];
-			else
-				v[k++] = f[j++];
-		}
-			if(i > m)
-				while( j <= r)
-					v[k++] = f[j++];
-			else
-				while(i <= m)
-					v[k++] = f[i++];
-			
-			for(k=0; k < v.length ; k++)
-				f[k+1] = v[k];
-		
-		}
+    private static void merge ( frequency [] A , int l , int m , int r ) 
+    {
+        frequency [] B = new frequency [ r - l + 1];
+        int i = l , j = m + 1 , k = 0;
+    
+        while ( i <= m && j <= r )
+        {
+            if ( A [ i ].freq >= A [ j ].freq)
+                B [ k ++] = A [ i ++];
+            else
+                B [ k ++] = A [ j ++];
+        }
+        
+        if ( i > m )
+            while ( j <= r )
+                B [ k ++] = A [ j ++];
+        else
+            while ( i <= m )
+                B [ k ++] = A [ i ++];
+        
+        for ( k = 0; k < B . length ; k ++)
+            A [ k + l ] = B [ k ];
+    }
 
 
 }
