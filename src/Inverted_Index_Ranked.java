@@ -6,11 +6,11 @@ public class Inverted_Index_Ranked {
 		int freq =0; //  a frequency score
 	}
 	
-	LinckedList<Terms> InvertedIndex;
+	LinkedList<Terms> InvertedIndex;
 	Frequency[] Freqs;
 
 	public Inverted_Index_Ranked() {
-		InvertedIndex = new LinckedList<Terms>();
+		InvertedIndex = new LinkedList<Terms>();
 		Freqs = new Frequency[50];
 	}
 	
